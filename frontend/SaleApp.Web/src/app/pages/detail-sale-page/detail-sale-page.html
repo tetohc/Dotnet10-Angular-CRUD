@@ -1,0 +1,77 @@
+<app-navbar></app-navbar>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-gradient mb-0">Detalles de la venta</h2>
+            <small class="text-secondary">Información completa de la venta seleccionada.</small>
+        </div>
+        <a class="btn btn-outline-secondary rounded-pill" routerLink="/">Volver al listado</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100 border-0 rounded-3">
+                <div class="card-header fw-semibold bg-light">
+                    Información de la venta
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-5 text-secondary">Venta N° </div>
+                        <div class="col fw-semibold">{{ saleModel().id }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-5 text-secondary">Cliente</div>
+                        <div class="col">{{ saleModel().customerName }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-5 text-secondary">Tipo de pago</div>
+                        <div class="col">
+                            <span class="badge bg-info text-dark">{{ saleModel().paymentType }}</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold">Total</span>
+                        <span class="fs-4 fw-bold text-success">₡ {{ saleModel().total }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header fw-semibold bg-light">
+                    Productos
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Producto</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-end">Precio unitario</th>
+                                    <th class="text-end">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               @for (item of saleModel().details; track $index) {
+                                   <tr>
+                                       <td>{{ $index + 1 }}</td>
+                                       <td>{{ item.productName }}</td>
+                                       <td class="text-center">{{ item.quantity }}</td>
+                                       <td class="text-end">₡ {{ item.unitPrice }}</td>
+                                       <td class="text-end">₡ {{ item.unitPrice * item.quantity }}</td>
+                                   </tr>
+                               } 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

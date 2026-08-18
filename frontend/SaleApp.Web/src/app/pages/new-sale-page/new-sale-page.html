@@ -1,0 +1,113 @@
+<app-navbar></app-navbar>
+
+<div class="container py-5">
+    <div class="mb-4">
+        <h2 class="fw-bold text-gradient mb-1">Nueva venta</h2>
+        <p class="text-secondary mb-0">
+            Complete la información para registrar una nueva venta.
+        </p>
+    </div>
+
+    <div class="card shadow-sm mb-4 border-0 rounded-3">
+        <div class="card-header bg-light fw-semibold">
+            Información de la venta
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">
+                        Nombre del cliente
+                    </label>
+                    <input type="text" [formField]="saleForm.customerName" class="form-control rounded-pill" placeholder="Ingrese el nombre del cliente" autocomplete="off">
+                    
+                    @if(saleForm.customerName().touched() && saleForm.customerName().invalid()){
+                        <small class="text-danger">
+                            {{ saleForm.customerName().errors()[0].message }}
+                        </small>
+                    }
+
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">
+                        Tipo de pago
+                    </label>
+                    <select class="form-select rounded-pill" [formField]="saleForm.paymentType">
+                        <option value="0" selected disabled>Seleccione un tipo de pago</option>
+                        <option value="1">Efectivo</option>
+                        <option value="2">Tarjeta</option>
+                        <option value="3">Transferencia</option>
+                    </select>
+                    @if(saleForm.paymentType().touched() && saleForm.paymentType().invalid()){
+                        <small class="text-danger">
+                            {{ saleForm.paymentType().errors()[0].message }}
+                        </small>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center fw-semibold">
+            Detalle de productos
+            <button class="btn btn-primary btn-sm rounded-pill shadow-sm" (click)="addProduct()">
+                Agregar producto
+            </button>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th width="140">Cantidad</th>
+                            <th width="180">Precio unitario</th>
+                            <th width="180">Subtotal</th>
+                            <th width="100">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of saleForm.details; track $index) {
+                            <tr>
+                                <td><input type="text" class="form-control rounded-pill" [formField]="item.productName" placeholder="Nombre del producto"></td>
+                                <td><input type="number" class="form-control rounded-pill" [formField]="item.quantity"></td>
+                                <td><input type="number" class="form-control rounded-pill" [formField]="item.unitPrice"></td>
+                                <td><span class="fw-semibold">
+                                    ₡ {{ item.quantity().value() * item.unitPrice().value() }}
+                                </span></td>
+                                <td>
+                                    <button class="btn btn-outline-danger btn-sm rounded-pill" (click)="removeProduct($index)">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <div>
+                <span class="fs-5 fw-semibold">Total:</span>
+                <span class="fs-4 fw-bold text-success ms-2">₡ {{total().toFixed(2)}}</span>
+            </div>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-secondary rounded-pill" routerLink="/">Cancelar</a>
+                <button type="button" class="btn btn-success rounded-pill shadow-sm" (click)="save()" [disabled]="isLoading()">
+                    @if (!isLoading()) {
+                        <span>Guardar venta</span>
+                    } @else {
+                        <span>
+                            <span class="spinner-border spinner-border-sm me-2"></span> Guardando...
+                        </span>
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
